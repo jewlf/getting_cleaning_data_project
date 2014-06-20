@@ -15,7 +15,7 @@ Original source codebooks are:
 Of the original 561 features, only those non-angle features containing
 the string "mean" or "std" were considered and averaged.  The below listing
 shows the original names on the left and the corresponging names used by
-the averages calcualted by this project on the right:
+the averages calculated by this project on the right:
 
 1 tBodyAcc-mean()-X                    TimeBodyAcc_mean_X
 2 tBodyAcc-mean()-Y                    TimeBodyAcc_mean_Y
