@@ -1,5 +1,4 @@
 README.md for "getting_cleaning_data_project" - Jim Wolfe 6/19/2014
-#========================================================================
 
 BACKGROUND: The UCI project "Human Activity Recognition Using Smartphones Data
 Set" collected accelerometer and gyroscope data from Samsung Galaxy S smartphones
@@ -55,32 +54,37 @@ make a script that followed a logical progression without too much "magic".
 
 SCRIPT DETAILED STEPS:
 
-Step 1  - Get the column names               (from "features.txt" file)
-   Handle the "test" data...
-Step 2a - Get Test Data                      (from "X_test.txt" file
-Step 3a - Apply column names to Test Data
-Step 4a - Get the Test Data Subject column   (from "subject_test.txt")
-Step 5a - Apply column name to Test Subject column
-Step 6a - Get the Test Activity column       (from "y_test.txt")
-Step 7a - Apply column name to Test Activity column
-Step 8a - Glue columns together in this order: Activity | Subject | Data
-   Handle the "training" data...
-Step 2b - Get Training Data                  (from "X_train.txt" file)
-Step 3b - Apply column names to Train Data
-Step 4b - Get the Train Data Subject column  (from "subject_test.txt")
-Step 5b - Apply column name to Train Subject column
-Step 6b - Get the Train Activity column      (from "y_train.txt")
-Step 7b - Apply column name to Train Activity column
-Step 8b - Glue them all together in this order: Activity | Subject | Data
-Step 9  - Combine Test and Train into one data frame
-   Now using combined "test" and "training" data...
-Step 10 - In the Activity column, replace
-Step 11 - Left pad the Subject values with zero to make later sorting nicer
-Step 12 - Get only columns "Activity", "Subject" and others dealing with
-          means ("mean") or standard deviations ("std")
-Step 13 - "Melt" the data so that the measured Variables are stored as rows
-Step 14 - Find the averages for each "Activity" and "Subject" combination
-Step 15 - Write the Tidy Data to a text file, "tidydata.txt"
++Step 1  - Get the column names (from "features.txt" file)
+
+Handle the "test" data...
+
++Step 2a - Get Test Data (from "X_test.txt" file
++Step 3a - Apply column names to Test Data
++Step 4a - Get the Test Data Subject column (from "subject_test.txt")
++Step 5a - Apply column name to Test Subject column
++Step 6a - Get the Test Activity column (from "y_test.txt")
++Step 7a - Apply column name to Test Activity column
++Step 8a - Glue columns together in this order: Activity | Subject | Data
+
+Handle the "training" data...
+
++Step 2b - Get Training Data (from "X_train.txt" file)
++Step 3b - Apply column names to Train Data
++Step 4b - Get the Train Data Subject column (from "subject_test.txt")
++Step 5b - Apply column name to Train Subject column
++Step 6b - Get the Train Activity column (from "y_train.txt")
++Step 7b - Apply column name to Train Activity column
++Step 8b - Glue them all together in this order: Activity | Subject | Data
++Step 9  - Combine Test and Train into one data frame
+
+Now using combined "test" and "training" data...
+
++Step 10 - In the Activity column, replace
++Step 11 - Left pad the Subject values with zero to make later sorting nicer
++Step 12 - Get only columns "Activity", "Subject" and others dealing with means ("mean") or standard deviations ("std")
++Step 13 - "Melt" the data so that the measured Variables are stored as rows
++Step 14 - Find the averages for each "Activity" and "Subject" combination
++Step 15 - Write the Tidy Data to a text file, "tidydata.txt"
 
 (see the script "run_analysis.R" for even more details surrounding each step)
 
@@ -137,11 +141,10 @@ The First row contains column names, each enclosed with " ".
 
 Exported columns are:
 
-Activity   = character field, containing one of the 6 activities
-Subject    = character field, ranging from 1 to 30
-Variable   = character field, what parameter was measureed
-Average    = numeric field, the average of the variable measurements
-             for the indicated Activity and Subject
++Activity   = character field, containing one of the 6 activities
++Subject    = character field, ranging from 1 to 30
++Variable   = character field, what parameter was measureed
++Average    = numeric field, the average of the variable measurements for the indicated Activity and Subject
 
 Ordering is by Activity, Subject and Variable name
 
