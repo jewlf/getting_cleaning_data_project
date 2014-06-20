@@ -1,13 +1,35 @@
+#========================================================================
+#    File: run_analysis.R
+#    Date: 03/19/2014
+#  Author: Jim Wolfe
+#     URL: https://github.com/jewlf/getting_cleaning_data_project/blob/master/run_analysis.R
+#   Email: <no spam>
+#
+# Purpose: This script reads source data previously downloaded from:
+# https://d396qusza40orc.cloudfront.net/getdata%2Fprojectfiles%2FUCI%20HAR%20Dataset.zip
+# and performs several general steps:
+#
+#  + Merges the test and training data sets into one data set
+#  + Extracts only the measuremements related to mean or standard deviation
+#  + Renames the activities from numbers to descripting text
+#  + Labels the variables with more readible names
+#  + Writes a "tiny data set" containing averaged values
+#
+# For more details see the accompanying README.md and CODEBOOK.TXT found
+# in this repo.
+#
+#========================================================================
+
 getwd()  # Check what directory we're in
 setwd("./UCI HAR Dataset") #Step down to the project main directory
 getwd()  # Confirm we are where we intended
 
 
-#========================================
+#========================================================================
 # Step 1 - Get the column names
-#========================================
+#========================================================================
 
-# Read in the FEATURES.TXT file to a dataframe as characters
+# Read in the "features.txt" file to a dataframe as characters
 features <- read.table("features.txt", colClasses = "character")
 # str(features) # Now have 2 columns x 561 rows
                 # Column is 1,2,3... sequential
@@ -61,9 +83,9 @@ column_names5 <- gsub("^f","Freq",column_names4, perl = TRUE)
 column_names6 <- gsub("BodyBody","Body",column_names5, fixed = TRUE)
 
 
-#========================================
+#========================================================================
 # Step 2a - Get Test Data
-#========================================
+#========================================================================
 getwd()  # Check what director we're in
 setwd("./test") #Step down to the "test" directory
 getwd()  # Confirm we are where we intended
@@ -71,52 +93,52 @@ getwd()  # Confirm we are where we intended
 test_data <- read.table("X_test.txt", colClasses = "character")
 
 
-#========================================
+#========================================================================
 # Step 3a - Apply column names to Test Data
-#========================================
+#========================================================================
 names(test_data) <- column_names6
 # head(test_data)  # Take a look
 
-#========================================
+#========================================================================
 # Step 4a - Get the Test Data Subject column
-#========================================
+#========================================================================
 test_subjects <- read.table("subject_test.txt", colClasses = "character")
 
-#========================================
+#========================================================================
 # Step 5a - Apply column name to Test Subject column
-#========================================
+#========================================================================
 names(test_subjects) <- c("Subject")
 # head(test_subjects)  # Take a look
 
-#========================================
+#========================================================================
 # Step 6a - Get the Test Activity column
-#========================================
+#========================================================================
 test_activity <- read.table("y_test.txt", colClasses = "character")
 
-#========================================
+#========================================================================
 # Step 7a - Apply column name to Test Activity column
-#========================================
+#========================================================================
 names(test_activity) <- c("Activity")
 # head(test_activity)  # Take a look
 
-#========================================
+#========================================================================
 # Step 8a - Glue them all together in this order:
 #    Activity | Subject | Data
-#========================================
+#========================================================================
 
 test_data2 <- cbind(test_activity, test_subjects)
 test_data2 <- cbind(test_data2, test_data)
 # head(test_data2)  # Take a look
 
 
-###########################################
-#   Similar steps for training data
-###########################################
+#########################################################################
+#   Perform similar steps for training data
+#########################################################################
 
 
-#========================================
+#========================================================================
 # Step 2b - Get Training Data
-#========================================
+#========================================================================
 getwd()  # Check what directory we're in
 setwd("../train") #Step up and back down to the "train" directory
 getwd()  # Confirm we are where we intended
@@ -124,46 +146,46 @@ getwd()  # Confirm we are where we intended
 train_data <- read.table("X_train.txt", colClasses = "character")
 
 
-#========================================
+#========================================================================
 # Step 3b - Apply column names to Train Data
-#========================================
+#========================================================================
 names(train_data) <- column_names6
 # head(train_data)  # Take a look
 
-#========================================
+#========================================================================
 # Step 4b - Get the Train Data Subject column
-#========================================
+#========================================================================
 train_subjects <- read.table("subject_train.txt", colClasses = "character")
 
-#========================================
+#========================================================================
 # Step 5b - Apply column name to Train Subject column
-#========================================
+#========================================================================
 names(train_subjects) <- c("Subject")
 # head(train_subjects)  # Take a look
 
-#========================================
+#========================================================================
 # Step 6b - Get the Train Activity column
-#========================================
+#========================================================================
 train_activity <- read.table("y_train.txt", colClasses = "character")
 
-#========================================
+#========================================================================
 # Step 7b - Apply column name to Train Activity column
-#========================================
+#========================================================================
 names(train_activity) <- c("Activity")
 # head(train_activity)  # Take a look
 
-#========================================
+#========================================================================
 # Step 8b - Glue them all together in this order:
 #    Activity | Subject | Data
-#========================================
+#========================================================================
 
 train_data2 <- cbind(train_activity, train_subjects)
 train_data2 <- cbind(train_data2, train_data)
 # head(train_data2)  # Take a look
 
-#========================================
+#========================================================================
 # Step 9 - Combine Test and Train into one DF
-#========================================
+#========================================================================
 # nrow(test_data2)  # Shows 2947 rows
 # nrow(train_data2) # Shows 7532 rows
 expected_rows <- nrow(test_data2) + nrow(train_data2)
@@ -173,7 +195,7 @@ data2 <- rbind(test_data2, train_data2)
 # head(data2)
 # nrow(data2)       # 10299, as expected
 
-#========================================
+#========================================================================
 # Step 10 - In the Activity column, replace
 # numbers with words, like this:
 #    1 = WALKING
@@ -182,7 +204,7 @@ data2 <- rbind(test_data2, train_data2)
 #    4 = SITTING
 #    5 = STANDING
 #    6 = LAYING
-#========================================
+#========================================================================
 
 data2$Activity[data2$Activity == "1"] <- "WALKING"
 data2$Activity[data2$Activity == "2"] <- "WALKING_UPSTAIRS"
@@ -194,31 +216,28 @@ data2$Activity[data2$Activity == "6"] <- "LAYING"
 # data2$Activity   # Take a look
 # head(data2)
 
-# Left pad the Subject values with zero to make
+#========================================================================
+# Step 11 - Left pad the Subject values with zero to make
 # later sorting look nicer
+#========================================================================
 data2$Subject <- gsub(" ", "0", formatC(data2$Subject, width=2))
+
 # data2$Subject    # Take a look, much better
+# head(data2)      # Take a look
 
-# head(data2)
-
-#########################################
-# At this point, the data frame "data2" 
-# contains everything in a clean format
-# and is available should we want to do 
-# anything requiring columns in addition
-# to the mean and std var columns.
+#########################################################################
+# At this point, the data frame "data2" contains everything in a
+# clean format and is available should we want to do anything
+# requiring columns in addition to the mean and std var columns.
 #
-# However, for this project, we're only
-# asked for the mean and std dev columns,
-# so now we'll isolate them.
-#########################################
+# However, for this project, we're only asked for the mean and std dev
+# columns, so now we'll isolate them.
+#########################################################################
 
-#========================================
-# Step 10 - Get only columns "Activity",
-# "Subject" and any others dealing with
-# means ("mean") or standard deviations
-# ("std")
-#========================================
+#========================================================================
+# Step 12 - Get only columns "Activity", "Subject" and any others
+# dealing with means ("mean") or standard deviations ("std")
+#========================================================================
 data3 <- data2[,grep("Activity|Subject|*mean*|*std*", colnames(data2))]
 # nrow(data3)      # Still have the 10299 rows
 # ncol(data3)      # But now only have 81 columns
@@ -228,21 +247,18 @@ data3 <- data2[,grep("Activity|Subject|*mean*|*std*", colnames(data2))]
 # str(data3)       # Take a look
 # all(colSums(is.na(data3))==0) # Check for N/As, none
 
-#########################################
-# At this point, "data3" is a "more trim"
-# data frame containing columns "Activity",
-# "Subject" and all other columns dealing
-# with means ("mean") or standard deviations
-# ("std").
+#########################################################################
+# At this point, "data3" is a "more trim" data frame containing
+# columns "Activity", "Subject" and all other columns dealing with
+# means ("mean") or standard deviations ("std").
 #
-#  "data3" is the "main" Data Set
-#  output to satisfy project directives
-#  1 through 4.
-#########################################
+# "data3" is the "main" Data Set output to satisfy project directives
+# 1 through 4.
+#########################################################################
 
-
-# "Melt" the data so that the Variables are stored as rows instead of 
-# columns, to result in an arrangement like:
+#========================================================================
+# Step 13 - "Melt" the data so that the measured Variables are stored as
+# rows instead of columns, to result in an arrangement like:
 #
 #    Activity | Subject | Variable           | Value
 #    STANDING |      02 | TimeBodyAcc_mean_X | 2.5717778e-001
@@ -266,9 +282,10 @@ data4$variable <- as.character(data4$variable)
 # str(data4)       # Take a look, that's better
 # head(data4,n=10) # Take a look
 
-# Having a long history in SQL, I prefer to use a SQL statement
+#========================================================================
+# Step 14 - Having a long history in SQL, I prefer to use a SQL statement
 # to find the means
-
+#========================================================================
 library(sqldf)     # Load the sqldf library to make "sqldf" available
 
 # Get the grouped averages and "pretty up" the field names
@@ -291,9 +308,9 @@ data5 <- sqldf('SELECT Activity, Subject, variable AS Variable, AVG(value) AS Av
 # 79 variables * 30 subjects * 6 activities = 14220
 # nrow(data5)  # And it is
 
-#========================================
-# Step 11 - Write the Tidy Data to a text
-#========================================
+#========================================================================
+# Step 15 - Write the Tidy Data to a text
+#========================================================================
 getwd()     # Check what directory we're in
 setwd("..") # Step up to target directory
 getwd()     # Confirm we are where we intended
@@ -314,8 +331,3 @@ write.table(data5, ".\\tidydata.txt", row.names = FALSE)
 #
 # Ordering is by Activity, Subject and Variable name
 #
-
-
-
-
-
