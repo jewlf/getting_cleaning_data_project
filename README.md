@@ -82,7 +82,7 @@ Now using combined "test" and "training" data...
 + Step 10 - In the Activity column, replace
 + Step 11 - Left pad the Subject values with zero to make later sorting nicer
 + Step 12 - Get only columns "Activity", "Subject" and others dealing with means ("mean") or standard deviations ("std")
-+ Step 13 - "Melt" the data so that the measured Variables are stored as rows
++ Step 13 - "Melt" the data so that the features are stored as rows
 + Step 14 - Find the averages for each "Activity" and "Subject" combination
 + Step 15 - Write the Tidy Data to a text file, "tidydata.txt"
 
@@ -90,7 +90,7 @@ Now using combined "test" and "training" data...
 
 TIDY DATA:  In Hadley Wickham's "Journal of Statistical Software", volume VV,
 issue II, page 4 (available at: http://vita.had.co.nz/papers/tidy-data.pdf), he
-says that in "tidy data", "each variable forms a column" and "each observation
+says that in "tidy data", "each feature forms a column" and "each observation
 forms a row".
 
 In the source dataset from the Human Activity Recognition project, the
@@ -101,7 +101,7 @@ Since the "run_analysis.R" script averages for each Activity, Subject and
 subset of "features", it seems "tidier" and more conducive for subsequent
 use to arrange the output in a "tall skinny" arrangement like this:
 
-Activity    Subject    Variable                       Average
+Activity    Subject    Feature                        Average
 LAYING      01         FreqBodyAccJerkMag_mean       -0.9333003608
 LAYING      01         FreqBodyAccJerkMag_meanFreq    0.26639115416
 :
@@ -114,10 +114,12 @@ statement like:
 
 SELECT average
 FROM tidydata
-WHERE activity='laying' AND subject='01' AND variable='FreqBodyAccJerkMag_mean'
+WHERE activity='laying' AND subject='01' AND feature='FreqBodyAccJerkMag_mean'
+
+And it is much easier to view with common text editors, like MS Notepad.
 
 
-Variable names from the original "features.txt" file have been slightly tweaked
+Feature names from the original "features.txt" file have been slightly tweaked
 for this script's output file.  The leading "t" has been replaced with "Time",
 and the leading "f" replaced by "Freq".
 
@@ -135,7 +137,7 @@ And the apparent typo "BodyBody" is replaced by "Body".
 
 
 OUTPUT FILE: The tidy data output file, is named "tidydata.txt" and
-is space delimited, with character strings enclosed in " ".
+is single space delimited, with character strings enclosed in " ".
 
 The First row contains column names, each enclosed with " ".
 
@@ -143,10 +145,10 @@ Exported columns are:
 
 + Activity   = character field, containing one of the 6 activities
 + Subject    = character field, ranging from 1 to 30
-+ Variable   = character field, what parameter was measureed
-+ Average    = numeric field, the average of the variable measurements for the indicated Activity and Subject
++ Feature    = character field, what parameter was measureed
++ Average    = numeric field, the average of the feature measurements for the indicated Activity and Subject
 
-Ordering is by Activity, Subject and Variable name
+Ordering is by Activity, Subject and FEature name
 
 Emjoy!
 Jim

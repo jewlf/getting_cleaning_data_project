@@ -12,7 +12,7 @@
 #  + Merges the test and training data sets into one data set
 #  + Extracts only the measuremements related to mean or standard deviation
 #  + Renames the activities from numbers to descripting text
-#  + Labels the variables with more readible names
+#  + Labels the features with more readible names
 #  + Writes a "tiny data set" containing averaged values
 #
 # For more details see the accompanying README.md and CODEBOOK.TXT found
@@ -59,7 +59,7 @@ column_namesy <- gsub("()","",column_namesx, fixed = TRUE)
 # it will get fixed in this step, too.
 column_namesz <- make.names(column_namesy, unique = TRUE)
 # ?make.names()
-# column_names   # Take a look
+# column_namesz   # Take a look
 
 # For readability, lets replace any repeating periods with single periods
 column_names2 <- gsub("\\.+",".",column_namesz, perl = TRUE)
@@ -257,19 +257,21 @@ data3 <- data2[,grep("Activity|Subject|*mean*|*std*", colnames(data2))]
 #########################################################################
 
 #========================================================================
-# Step 13 - "Melt" the data so that the measured Variables are stored as
+# Step 13 - "Melt" the data so that the Features are stored as
 # rows instead of columns, to result in an arrangement like:
 #
-#    Activity | Subject | Variable           | Value
+#    Activity | Subject | variable           | Value
 #    STANDING |      02 | TimeBodyAcc_mean_X | 2.5717778e-001
 #
+# Note taht Melt creates the field name "variable" which we'll change
+# to "feature" later on
 
 library(reshape2)  # Load the Reshape 2 library to make "melt" available
 
 data4 <- melt(data3,id=c("Activity","Subject"))
                    # Keeping "Activity" and "Subject" as columns
                    # means that the 81 - 2 = 79 columns will become
-                   # 30 volunteers, 6 activities, 79 variables
+                   # 30 volunteers, 6 activities, 79 features
 # nrow(data4)      # Result has 10299 * 79 = 813621 rows
 # ncol(data4)      # But now only have 4 columns
 # head(data4,n=10) # Take a look
@@ -277,7 +279,7 @@ data4 <- melt(data3,id=c("Activity","Subject"))
 # summary(data4)   # Take a look
 # str(data4)       # Take a look
 
-# Melt changed the variables to factors, so change them back to characters
+# Melt changed the features to factors, so change them back to characters
 data4$variable <- as.character(data4$variable)
 # str(data4)       # Take a look, that's better
 # head(data4,n=10) # Take a look
@@ -288,11 +290,12 @@ data4$variable <- as.character(data4$variable)
 #========================================================================
 library(sqldf)     # Load the sqldf library to make "sqldf" available
 
-# Get the grouped averages and "pretty up" the field names
-data5 <- sqldf('SELECT Activity, Subject, variable AS Variable, AVG(value) AS Average
+# Get the grouped averages and "pretty up" the field names,
+# Including changing "variable" to "feature"
+data5 <- sqldf('SELECT Activity, Subject, variable AS Feature, AVG(value) AS Average
     FROM data4
-    GROUP BY Activity, Subject, variable
-    ORDER BY Activity, Subject, Variable')
+    GROUP BY Activity, Subject, Feature
+    ORDER BY Activity, Subject, Feature')
 
 # head(data5)  # Take a look, note first Subject is "01"
 # tail(data5)  # Take a look, note last Subject is "30"
@@ -305,7 +308,7 @@ data5 <- sqldf('SELECT Activity, Subject, variable AS Variable, AVG(value) AS Av
 # nrow(data5[data5$Subject == "01",])  # And it is
 
 # Expecting overall Tidy Data row count to be
-# 79 variables * 30 subjects * 6 activities = 14220
+# 79 features * 30 subjects * 6 activities = 14220
 # nrow(data5)  # And it is
 
 #========================================================================
@@ -325,9 +328,9 @@ write.table(data5, ".\\tidydata.txt", row.names = FALSE)
 #
 # Activity   = character field, containing one of the 6 activities
 # Subject    = character field, ranging from 1 to 30
-# Variable   = character field, what parameter was measureed
-# Average    = numeric field, the average of the variable measurements
+# Feature    = character field, what parameter was measureed
+# Average    = numeric field, the average of the feature measurements
 #              for the indicated Activity and Subject
 #
-# Ordering is by Activity, Subject and Variable name
+# Ordering is by Activity, Subject and Feature name
 #
