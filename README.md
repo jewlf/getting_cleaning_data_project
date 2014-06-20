@@ -148,9 +148,9 @@ Exported columns are:
 + Feature    = character field, what parameter was measureed
 + Average    = numeric field, the average of the feature measurements for the indicated Activity and Subject
 
-Ordering is by Activity, Subject and FEature name
+Ordering is by Activity, Subject and Feature name
 
-Emjoy!
+Enjoy!
 Jim
 
 
